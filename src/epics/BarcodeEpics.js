@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, concat } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { BARCODE_READ } from '../actions/types';
 import { setReadStudent } from '../actions';
@@ -11,7 +11,7 @@ export class BarcodeEpics {
   decode(action$, store){
     return action$.pipe(
       ofType(BARCODE_READ),
-      map(({ data }) => setReadStudent(data))
+      map(({ data }) => setReadStudent(data)),
     );
   }
 }
