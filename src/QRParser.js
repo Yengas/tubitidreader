@@ -7,8 +7,8 @@ function generateSignForData({ id, name, department, grade }, secret){
   return CryptoJS.HmacSHA1(`${id}${name}${department}${grade}`, secret).words;
 }
 
-async function loadTypes(file){
-  const data = require(file);
+function loadTypes(){
+  const data = require('./tubit-id');
   const root = protobuf.Root.fromJSON(data);
   const Department = root.lookupEnum('tubit.Department');
   const IDCard = root.lookupType('tubit.IDCard');
@@ -20,8 +20,8 @@ function getStudent({ id, department, grade, name }, Department){
   return { id, grade, name, department: Department.valuesById[department] };
 }
 
-export default async () => {
-  const { Department, IDCard } = await loadTypes('./tubit-id.json');
+export default () => {
+  const { Department, IDCard } = loadTypes();
 
   class QRParser {
     constructor(secret){

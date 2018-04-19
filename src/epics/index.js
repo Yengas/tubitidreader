@@ -1,10 +1,10 @@
 import { combineEpics } from 'redux-observable';
 import BarcodeEpics from "./BarcodeEpics";
 
-export default () => {
-  const barcodeEpics = new BarcodeEpics();
+export default (parser) => {
+  const barcodeEpics = new BarcodeEpics(parser);
 
   return combineEpics(
-    barcodeEpics.decode,
+    barcodeEpics.decode.bind(barcodeEpics),
   );
 };
