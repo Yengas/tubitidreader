@@ -15,7 +15,7 @@ export class BarcodeEpics {
       flatMap(({ data }) =>
         Rx.Observable.fromPromise(this.parser.decode(data))
           .map((student) => setReadStudent(student))
-          .catch((e) => readStudentFailed(e))
+          .catch((e) => Rx.Observable.of(readStudentFailed(e)))
       )
     );
   }

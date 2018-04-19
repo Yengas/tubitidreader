@@ -33,13 +33,17 @@
               "type":"string",
               "id":4
             },
+            "challenge":{
+              "type":"uint32",
+              "id":5
+            },
             "signHigh":{
               "type":"int32",
-              "id":5
+              "id":6
             },
             "signLow":{
               "type":"int32",
-              "id":6
+              "id":7
             }
           }
         }

@@ -3,8 +3,8 @@ import protobuf from 'protobufjs';
 import { Buffer } from 'buffer';
 
 // Generates 8 byte sign for the data with our hmac.
-function generateSignForData({ id, name, department, grade }, secret){
-  return CryptoJS.HmacSHA1(`${id}${name}${department}${grade}`, secret).words;
+function generateSignForData({ id, name, department, grade, challenge }, secret){
+  return CryptoJS.HmacSHA1(`${id}${name}${department}${grade}${challenge || 0}`, secret).words;
 }
 
 function loadTypes(){
