@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 
-export class StudentProfile extends Component {
+type Props = {
+  student: any,
+};
+
+export class StudentProfile extends Component<Props> {
   render(){
     const { student } = this.props;
+    const studentJSON = JSON.stringify(student);
 
     return (
       <View>
         <Text>
-          { student !== null ? JSON.stringify(student) : 'No student set!' }
+          { student !== null ? studentJSON.replace(/(\r\n\t|\n|\r\t)/gm, '') + ' Bytes: ' + atob(student).length : 'No student set!' }
         </Text>
       </View>
     );
