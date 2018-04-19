@@ -1,3 +1,6 @@
+# ignore secrets from source control.
+src/secrets.js
+
 # OSX
 #
 .DS_Store
