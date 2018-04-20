@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PermissionsAndroid, Dimensions } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { barcodeReadAction } from '../actions'
+import I18n from '../i18n'
 
 export class CameraUnauthorizedView extends PureComponent {
   render(){
     return (
       <View>
-        <Text>Not authorized!</Text>
+        <Text>{I18n.t('camera_no_permission')}</Text>
       </View>
     );
   }
@@ -25,8 +26,8 @@ export class BarcodeReader extends Component {
 
   async UNSAFE_componentWillMount(){
     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
-      'title': 'Camera izni!',
-      'message':  'Lütfen kameraya izin ver!'
+      'title': I18n.t('camera_permission_title'),
+      'message': I18n.t('camera_permission_message')
     });
   }
 
