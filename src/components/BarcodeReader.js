@@ -31,7 +31,6 @@ export class BarcodeReader extends Component<Props> {
   }
 
   handleBarcodeRead({ type, data }){
-    console.log(data);
     if(type === 'QR_CODE')
       this.props.barcodeReadAction(data);
   }
