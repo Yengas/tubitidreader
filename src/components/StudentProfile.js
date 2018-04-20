@@ -12,7 +12,7 @@ export class StudentProfile extends Component<Props> {
     const { student } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
         <Text>
           { student !== null ? JSON.stringify(student) : I18n.t('no_student_read') }
         </Text>

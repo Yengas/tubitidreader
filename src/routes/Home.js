@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   camera: {
-    flex: 8,
+    flex: 35,
   },
   profile: {
-    flex: 2,
+    flex: 65,
   }
 });
 

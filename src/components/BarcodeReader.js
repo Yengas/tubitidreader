@@ -18,7 +18,7 @@ export class CameraUnauthorizedView extends PureComponent {
 export class BarcodeReader extends Component {
   render(){
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
         <RNCamera style={styles.camera} onBarCodeRead={this.handleBarcodeRead.bind(this)} type={'back'} />
       </View>
     );
