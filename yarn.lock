@@ -4315,6 +4315,10 @@ react-native-camera@^1.1.1:
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
+react-native-dialogs@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/react-native-dialogs/-/react-native-dialogs-0.0.21.tgz#57ea0d0cfcebbbe035e79282e0febca9ef1e6a2c"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
