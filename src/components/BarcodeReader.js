@@ -17,7 +17,11 @@ export class BarcodeReader extends PureComponent<Props> {
   render(){
     return (
       <View style={[styles.container, this.props.style]}>
-        <RNCamera style={styles.camera} onBarCodeRead={this.handleBarcodeRead.bind(this)} type={'back'} />
+        <RNCamera
+          style={styles.camera}
+          barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+          onBarCodeRead={(data) => this.handleBarcodeRead(data)}
+          type={'back'} />
       </View>
     );
   }
