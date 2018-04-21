@@ -8,7 +8,7 @@ export default (parser) => {
   const autoCameraCloserEpic = createAutoCameraCloserEpic(10000);
 
   return combineEpics(
-    barcodeEpics.decode.bind(barcodeEpics),
+    barcodeEpics.decodeDistinct.bind(barcodeEpics),
     autoCameraCloserEpic
   );
 };
