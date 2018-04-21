@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { cameraStartAction, barcodeReadAction } from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
 import StudentProfile from '../components/StudentProfile';
+import ReaderRole from '../components/ReaderRole';
 import I18n from '../i18n';
 
 type Props = {
@@ -38,6 +40,11 @@ export class Home extends Component<Props> {
     );
   }
 
+  // Sync the un-synced qr code reads with the database.
+  syncButtonPressed(){
+    // not implemented
+  }
+
   render(){
     const { cameraState: { open, inactive} } = this.props;
 
@@ -48,7 +55,20 @@ export class Home extends Component<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.cameraContainer}>{readerSection}</View>
-        <StudentProfile style={styles.profile} />
+        <View style={styles.statusContainer}>
+          <View style={styles.roleAndSyncContainer}>
+            <ReaderRole
+              roles={[{ name: 'Entering', value: 0 }, { name: 'Leaving', value: 1 }]}
+              onChange={(idx, name) => console.log('Changed', idx, name)}
+              selectedValue={0}/>
+            <MCIcon.Button
+              name="cloud-sync"
+              style={styles.syncButton}
+              onPress={() => this.syncButtonPressed()}>
+                {I18n.t('sync_button_message')}
+            </MCIcon.Button>
+          </View>
+        </View>
       </View>
     );
   }
@@ -66,10 +86,18 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(0, 0, 0, 0.2)',
     borderBottomWidth: 1 / PixelRatio.get(),
   },
-  profile: {
+  statusContainer: {
     flex: 65,
     paddingTop: 10 / PixelRatio.get(),
-  }
+    alignSelf: 'stretch',
+  },
+  roleAndSyncContainer: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: 10 / PixelRatio.get(),
+  },
 });
 
 

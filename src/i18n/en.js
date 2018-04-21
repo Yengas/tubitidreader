@@ -3,4 +3,5 @@ export default {
   camera_permission_title: 'Camera permission',
   camera_permission_message: 'Please give access to your camera!',
   no_student_read: 'No student read!',
+  sync_button_message: 'Sync',
 };
