@@ -11,7 +11,7 @@ export class BarcodeEpics {
   }
 
   // given a barcode stream, tries to decode the data into a student stream.
-  decodeBarcodeStream(barcodeRead$){
+  decodeBarcodeStream = (barcodeRead$) => {
     return barcodeRead$.pipe(
       flatMap(({ data }) =>
         Rx.Observable.fromPromise(this.parser.decode(data))
@@ -19,16 +19,16 @@ export class BarcodeEpics {
           .catch((e) => Rx.Observable.of(studentReadFailedAction(e)))
       )
     );
-  }
+  };
 
   // emits every qr code read, whenever they are read.
-  decode(action$){
+  decode = (action$) => {
     const barcode$ = action$.pipe(ofType(BARCODE_READ));
     return this.decodeBarcodeStream(barcode$);
-  }
+  };
 
   // doesn't emit the same qr code twice in one camera session.
-  decodeDistinct(action$){
+  decodeDistinct = (action$) => {
     const distinctBarcodePerCameraSession$ = wrapStreamInCameraSession(
       action$,
       action$.pipe(
@@ -39,7 +39,7 @@ export class BarcodeEpics {
     );
 
     return this.decodeBarcodeStream(distinctBarcodePerCameraSession$);
-  }
+  };
 }
 
 export default BarcodeEpics;
