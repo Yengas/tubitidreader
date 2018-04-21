@@ -1,5 +1,5 @@
 import Rx from 'rxjs/Rx';
-import { flatMap, distinct, tap } from 'rxjs/operators';
+import { flatMap, distinct } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { BARCODE_READ } from '../actions/types';
 import { studentReadSuccessAction, studentReadFailedAction } from '../actions';

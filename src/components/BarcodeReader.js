@@ -1,15 +1,14 @@
-import React, { Component, PureComponent } from 'react';
-import { connect } from 'react-redux';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, PermissionsAndroid, Dimensions } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { barcodeReadAction } from '../actions';
 
 type Props = {
   cameraPermissionRequestTitle: string,
   cameraPermissionRequestMessage: string,
+  onBarcodeRead: (data: string) => void,
 };
 
-export class BarcodeReader extends Component<Props> {
+export class BarcodeReader extends PureComponent<Props> {
   static defaultProps = {
     cameraPermissionRequestTitle: 'Camera Permission',
     cameraPermissionRequestMessage: 'Please give access to your camera!',
@@ -32,7 +31,7 @@ export class BarcodeReader extends Component<Props> {
 
   handleBarcodeRead({ type, data }){
     if(type === 'QR_CODE')
-      this.props.barcodeReadAction(data);
+      this.props.onBarcodeRead(data);
   }
 }
 
@@ -50,4 +49,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null, { barcodeReadAction })(BarcodeReader);
+export default BarcodeReader;

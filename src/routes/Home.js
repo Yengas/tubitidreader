@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
-import { cameraStartAction } from '../actions';
+import { cameraStartAction, barcodeReadAction } from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
 import StudentProfile from '../components/StudentProfile';
@@ -25,6 +25,7 @@ export class Home extends Component<Props> {
       <BarcodeReader
         cameraPermissionRequestTitle={I18n.t('camera_permission_title')}
         cameraPermissionRequestMessage={I18n.t('camera_permission_message')}
+        onBarcodeRead={(data) => this.props.barcodeReadAction(data)}
         style={styles.camera} />
     );
   }
@@ -85,4 +86,4 @@ function mapStateToProps(state){
   return { cameraState };
 }
 
-export default connect(mapStateToProps, { cameraStartAction })(Home);
+export default connect(mapStateToProps, { cameraStartAction, barcodeReadAction })(Home);
