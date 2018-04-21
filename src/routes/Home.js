@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { StudentLogType } from '../models/StudentTypes';
 import { cameraStartAction, barcodeReadAction } from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
-import StudentProfile from '../components/StudentProfile';
+import StudentSyncList from '../components/StudentSyncList';
 import ReaderRole from '../components/ReaderRole';
 import I18n from '../i18n';
 
@@ -13,7 +14,11 @@ type Props = {
   cameraState: {
     open: boolean,
     inactive: boolean,
-  }
+  },
+  studentState: {
+    sync: Array<StudentLogType>,
+    desync: Array<StudentLogType>,
+  },
 };
 
 export class Home extends Component<Props> {
@@ -46,7 +51,7 @@ export class Home extends Component<Props> {
   }
 
   render(){
-    const { cameraState: { open, inactive} } = this.props;
+    const { cameraState: { open, inactive }, studentState: { sync, desync } } = this.props;
 
     const readerSection = open
       ? this.renderBarcodeReader()
@@ -63,11 +68,16 @@ export class Home extends Component<Props> {
               selectedValue={0}/>
             <MCIcon.Button
               name="cloud-sync"
+              backgroundColor="rgba(33, 150, 243, 1)"
               style={styles.syncButton}
               onPress={() => this.syncButtonPressed()}>
                 {I18n.t('sync_button_message')}
             </MCIcon.Button>
           </View>
+          <StudentSyncList
+            syncStudents={sync}
+            desyncStudents={desync}
+            style={styles.studentSyncList}/>
         </View>
       </View>
     );
@@ -98,11 +108,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10 / PixelRatio.get(),
   },
+  studentSyncList: {
+    alignSelf: 'stretch',
+    paddingTop: 10 / PixelRatio.get(),
+  },
 });
 
 
 function mapStateToProps(state){
-  const { camera } = state;
+  const { camera, student } = state;
 
   const cameraState =
     camera.open === null
@@ -111,7 +125,12 @@ function mapStateToProps(state){
         ? { open: true, inactive: false }
         : { open: false, inactive: true };
 
-  return { cameraState };
+  const studentState = {
+    sync: student.sync,
+    desync: student.desync,
+  };
+
+  return { cameraState, studentState };
 }
 
 export default connect(mapStateToProps, { cameraStartAction, barcodeReadAction })(Home);
