@@ -9,6 +9,6 @@ export default (parser) => {
 
   return combineEpics(
     barcodeEpics.decode.bind(barcodeEpics),
-    autoCameraCloserEpic,
+    autoCameraCloserEpic
   );
 };

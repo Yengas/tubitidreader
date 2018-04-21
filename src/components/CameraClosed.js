@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 

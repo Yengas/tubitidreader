@@ -1,13 +1,13 @@
-import { BARCODE_READ, SET_READ_STUDENT, READ_STUDENT_FAILED } from './types';
+import { BARCODE_READ, STUDENT_READ_SUCCESS_ACTION, STUDENT_READ_FAILED_ACTION } from './types';
 
 export function barcodeReadAction(data){
   return { type: BARCODE_READ, data };
 }
 
-export function setReadStudent(student){
-  return { type: SET_READ_STUDENT, student };
+export function studentReadSuccessAction(student){
+  return { type: STUDENT_READ_SUCCESS_ACTION, student };
 }
 
-export function readStudentFailed({ message }){
-  return { type: READ_STUDENT_FAILED, message };
+export function studentReadFailedAction({ message }){
+  return { type: STUDENT_READ_FAILED_ACTION, message };
 }

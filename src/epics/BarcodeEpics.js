@@ -2,7 +2,7 @@ import Rx from 'rxjs/Rx';
 import { map, flatMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { BARCODE_READ } from '../actions/types';
-import { setReadStudent, readStudentFailed } from '../actions';
+import { studentReadSuccessAction, studentReadFailedAction } from '../actions';
 
 export class BarcodeEpics {
   constructor(parser){
@@ -14,8 +14,8 @@ export class BarcodeEpics {
       ofType(BARCODE_READ),
       flatMap(({ data }) =>
         Rx.Observable.fromPromise(this.parser.decode(data))
-          .map((student) => setReadStudent(student))
-          .catch((e) => Rx.Observable.of(readStudentFailed(e)))
+          .map((student) => studentReadSuccessAction(student))
+          .catch((e) => Rx.Observable.of(studentReadFailedAction(e)))
       )
     );
   }
