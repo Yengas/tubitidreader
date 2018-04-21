@@ -69,11 +69,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   titleText: {
+    fontWeight: 'bold',
     paddingRight: 10 / PixelRatio.get(),
   },
-  statusText: {
-    fontWeight: 'bold',
-  },
+  statusText: {},
   changeButton: {}
 });
 
