@@ -9,6 +9,7 @@ export type StudentLogType = {
   student: StudentType,
   time: number,
   isSync: boolean,
+  isCancelled: boolean,
   sync: {
     time: number,
   },

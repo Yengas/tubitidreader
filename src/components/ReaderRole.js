@@ -50,7 +50,10 @@ export class ReaderRole extends PureComponent<Props>{
           <Text style={styles.titleText}>{roleTitle}:</Text>
           <Text stlye={styles.statusText}>{selected.name}</Text>
         </View>
-        <Button style={styles.changeButton} title={changeButtonText} onPress={() => this.showDialog(selectedIndex)} />
+        <Button
+          style={styles.changeButton}
+          title={changeButtonText}
+          onPress={() => this.showDialog(selectedIndex)} />
       </View>
     );
   }

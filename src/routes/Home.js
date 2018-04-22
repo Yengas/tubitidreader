@@ -68,6 +68,7 @@ export class Home extends Component<Props> {
               selectedValue={0}/>
             <MCIcon.Button
               name="cloud-sync"
+              borderRadius={2}
               backgroundColor="rgba(33, 150, 243, 1)"
               style={styles.syncButton}
               onPress={() => this.syncButtonPressed()}>
@@ -98,6 +99,9 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     flex: 65,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     paddingTop: 10 / PixelRatio.get(),
     alignSelf: 'stretch',
   },
@@ -109,9 +113,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10 / PixelRatio.get(),
   },
   studentSyncList: {
+    flex: 1,
     alignSelf: 'stretch',
     paddingTop: 10 / PixelRatio.get(),
+    paddingBottom: 110 / PixelRatio.get(),
   },
+  syncButton: {
+  }
 });
 
 
