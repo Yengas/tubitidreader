@@ -12,6 +12,7 @@ export default (parser) => {
   return combineEpics(
     barcodeEpics.decodeDistinct,
     studentEpics.addStudentLogOnQrCodeRead,
+    studentEpics.handleSyncLogsRequest,
     autoCameraCloserEpic
   );
 };

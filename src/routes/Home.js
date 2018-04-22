@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
+import DialogAndroid from 'react-native-dialogs';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { StudentLogType } from '../models/StudentTypes';
-import { cameraStartAction, barcodeReadAction, changeLogReadingStatus } from '../actions';
+import {
+  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult
+} from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
 import StudentSyncList from '../components/StudentSyncList';
@@ -19,6 +22,11 @@ type Props = {
     sync: Array<StudentLogType>,
     desync: Array<StudentLogType>,
     selectedStatus: string,
+    syncInProgress: boolean,
+    syncResult: {
+      error: boolean,
+      message: string,
+    }
   },
 };
 
@@ -27,6 +35,15 @@ export class Home extends Component<Props> {
     open: false,
     inactive: false,
   };
+
+  UNSAFE_componentWillReceiveProps(nextProps){
+    const syncResult = nextProps && nextProps.studentState ? nextProps.studentState.syncResult : undefined;
+
+    if(syncResult){
+      this.showSyncResultDialog(syncResult);
+      this.props.clearSyncResult();
+    }
+  }
 
   renderBarcodeReader(){
     return (
@@ -48,11 +65,30 @@ export class Home extends Component<Props> {
 
   // Sync the un-synced qr code reads with the database.
   syncButtonPressed(){
-    // not implemented
+    this.props.syncLogRequest(
+      this.props.studentState.desync.filter(x => !x.isSync && !x.isCancelled)
+    );
+  }
+
+  showSyncResultDialog(syncResult){
+    const dialog = new DialogAndroid();
+
+    dialog.set({
+      title: syncResult.error ? I18n.t('sync_request_dialog_error_title') : I18n.t('sync_request_dialog_success_title'),
+      content: !syncResult.error
+        ? I18n.t('sync_request_dialog_success_description')
+        : I18n.t('sync_request_dialog_error_description').replace('%s', syncResult.message),
+      positiveText: I18n.t('sync_request_dialog_ok'),
+    });
+    dialog.show();
   }
 
   render(){
-    const { cameraState: { open, inactive }, studentState: { sync, desync, selectedStatus } } = this.props;
+    const {
+      cameraState: { open, inactive },
+      studentState: { sync, desync, selectedStatus, syncInProgress, syncResult }
+    } = this.props;
+
 
     const readerSection = open
       ? this.renderBarcodeReader()
@@ -70,10 +106,11 @@ export class Home extends Component<Props> {
             <MCIcon.Button
               name="cloud-sync"
               borderRadius={2}
-              backgroundColor="rgba(33, 150, 243, 1)"
+              backgroundColor={syncInProgress ? '#808080' : 'rgba(33, 150, 243, 1)'}
               style={styles.syncButton}
+              disabled={syncInProgress}
               onPress={() => this.syncButtonPressed()}>
-                {I18n.t('sync_button_message')}
+                {syncInProgress ? I18n.t('sync_button_inProgress_message') : I18n.t('sync_button_message')}
             </MCIcon.Button>
           </View>
           <StudentSyncList
@@ -138,9 +175,13 @@ function mapStateToProps(state){
     sync: student.sync,
     desync: student.desync,
     selectedStatus: student.logReadingStatus,
+    syncInProgress: student.syncInProgress,
+    syncResult: student.syncResult,
   };
 
   return { cameraState, studentState };
 }
 
-export default connect(mapStateToProps, { cameraStartAction, barcodeReadAction, changeLogReadingStatus })(Home);
+export default connect(mapStateToProps, {
+  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult
+})(Home);
