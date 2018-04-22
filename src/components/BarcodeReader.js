@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, PermissionsAndroid, Dimensions } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import QRScannerRectView from './QRScannerRectView';
 
 type Props = {
   cameraPermissionRequestTitle: string,
@@ -21,7 +22,14 @@ export class BarcodeReader extends PureComponent<Props> {
           style={styles.camera}
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           onBarCodeRead={(data) => this.handleBarcodeRead(data)}
-          type={'back'} />
+          type={'back'}>
+          <QRScannerRectView
+            cornerColor='rgba(33, 150, 243, 0.4)'
+            scanBarColor='rgba(33, 150, 243, 0.4)'
+            hintTextStyle={{ color: '#fff', fontSize: 10, backgroundColor: 'transparent' }}
+            rectHeight={160}
+            rectWidth={160} />
+        </RNCamera>
       </View>
     );
   }
