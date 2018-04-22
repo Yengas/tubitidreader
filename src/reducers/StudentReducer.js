@@ -19,6 +19,23 @@ function updateStateWithCheckin(state, { log }){
   }
 }
 
+function syncLogsWithIds(state, { ids, time }){
+  const desync = state.desync.filter(({ student }) => ids.indexOf(student.id) === -1);
+  const toUpdate = state.desync.filter(({ student }) => ids.indexOf(student.id) !== -1);
+  const updated = toUpdate.map(
+    ({ student, time, isCancelled, metadata }) =>
+      ({ student, time, isCancelled, metadata, isSync: true, sync: { time }})
+  );
+
+  return {
+    ...state,
+    syncInProgress: false,
+    syncResult: { error: false },
+    desync,
+    sync: [ ...updated, ...state.sync].sort(({ time: atime }, { time: btime }) => btime - atime)
+  };
+}
+
 export default (state = defaultState, action) => {
   switch(action.type){
     case ADD_STUDENT_CHECKIN_LOG:
@@ -28,7 +45,7 @@ export default (state = defaultState, action) => {
     case SYNC_LOG_REQUEST:
       return { ...state, syncInProgress: true };
     case SYNC_LOG_REQUEST_SUCCESS:
-      return { ...state, syncInProgress: false, syncResult: { error: false } };
+      return syncLogsWithIds(state, action);
     case SYNC_LOG_REQUEST_FAILED:
       return { ...state, syncInProgress: false, syncResult: { error: true, message: action.message }};
     case CLEAR_SYNC_RESULT:
