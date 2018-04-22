@@ -7,6 +7,8 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { HMAC_SECRET } from './src/secrets';
 import createQRParserClass from './src/QRParser';
@@ -36,10 +38,13 @@ export default class App extends Component {
         applyMiddleware(epicMiddleware)
       )
     );
+    const persistor = persistStore(store);
 
     return (
       <Provider store={store}>
-        <Router />
+        <PersistGate loading={null} persistor={persistor}>
+          <Router />
+        </PersistGate>
       </Provider>
     );
   }
