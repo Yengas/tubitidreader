@@ -5,12 +5,8 @@ const defaultState = {
   logReadingStatus: 'none'
 };
 
-function updateStateWithCheckin(state, { student, time, metadata, sync, cancelled }){
-  const isSync = sync !== null;
-  const isCancelled = !!cancelled;
-  const log = Object.assign({}, { student, time, metadata, isSync, isCancelled }, isSync ? { sync } : {});
-
-  if(!isSync){
+function updateStateWithCheckin(state, { log }){
+  if(!log.isSync){
     return { ...state, desync: [ log, ...state.desync ] };
   }else{
     return { ...state, sync: [ log, ...state.sync ] };
