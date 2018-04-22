@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { StudentLogType } from '../models/StudentTypes';
-import { cameraStartAction, barcodeReadAction } from '../actions';
+import { cameraStartAction, barcodeReadAction, changeLogReadingStatus } from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
 import StudentSyncList from '../components/StudentSyncList';
@@ -18,6 +18,7 @@ type Props = {
   studentState: {
     sync: Array<StudentLogType>,
     desync: Array<StudentLogType>,
+    selectedStatus: string,
   },
 };
 
@@ -51,7 +52,7 @@ export class Home extends Component<Props> {
   }
 
   render(){
-    const { cameraState: { open, inactive }, studentState: { sync, desync } } = this.props;
+    const { cameraState: { open, inactive }, studentState: { sync, desync, selectedStatus } } = this.props;
 
     const readerSection = open
       ? this.renderBarcodeReader()
@@ -63,9 +64,9 @@ export class Home extends Component<Props> {
         <View style={styles.statusContainer}>
           <View style={styles.roleAndSyncContainer}>
             <ReaderRole
-              roles={[{ name: 'Entering', value: 0 }, { name: 'Leaving', value: 1 }]}
-              onChange={(idx, name) => console.log('Changed', idx, name)}
-              selectedValue={0}/>
+              roles={[{ name: 'Enter', value: 'enter' }, { name: 'Leaving', value: 'leave' }]}
+              onChange={(value, name) => this.props.changeLogReadingStatus(value)}
+              selectedValue={selectedStatus}/>
             <MCIcon.Button
               name="cloud-sync"
               borderRadius={2}
@@ -136,9 +137,10 @@ function mapStateToProps(state){
   const studentState = {
     sync: student.sync,
     desync: student.desync,
+    selectedStatus: student.logReadingStatus,
   };
 
   return { cameraState, studentState };
 }
 
-export default connect(mapStateToProps, { cameraStartAction, barcodeReadAction })(Home);
+export default connect(mapStateToProps, { cameraStartAction, barcodeReadAction, changeLogReadingStatus })(Home);

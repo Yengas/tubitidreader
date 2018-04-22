@@ -11,8 +11,8 @@ export class StudentEpics{
     action$.pipe(
       ofType(STUDENT_READ_SUCCESS_ACTION),
       map(({ student }) => {
-        // get metadata with store.getState and append it...
-        return addStudentCheckinLog(student, new Date().valueOf(), {})
+        const { student: { logReadingStatus }} = store.getState();
+        return addStudentCheckinLog(student, new Date().valueOf(), { status: logReadingStatus });
       })
     );
 

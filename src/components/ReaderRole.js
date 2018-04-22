@@ -5,10 +5,10 @@ import DialogAndroid from 'react-native-dialogs';
 type Props = {
   roles: Array<{
     name: string,
-    value: number,
+    value: string,
   }>,
-  onChange: (value: number, name: string) => void,
-  selectedValue: number,
+  onChange: (value: string, name: string) => void,
+  selectedValue: string,
   roleTitle: string,
   changeButtonText: string,
   roleSelectDialogTitle: string,
@@ -21,8 +21,18 @@ export class ReaderRole extends PureComponent<Props>{
     roleSelectDialogTitle: 'Select role',
   };
 
+  constructor(props){
+    super(props);
+    if(this.findIndex(this.props.selectedValue) === -1)
+      props.onChange(props.roles[0].value, props.roles[1].name);
+  }
+
+  findIndex(status){
+    return this.props.roles.findIndex(({ value }) => value === status);
+  }
+
   getSelectedIndex(){
-    const index = this.props.roles.findIndex(({ value }) => value === this.props.selectedValue);
+    const index = this.findIndex(this.props.selectedValue);
     return index < 0 ? 0 : index;
   }
 

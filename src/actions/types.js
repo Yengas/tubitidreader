@@ -6,3 +6,4 @@ export const CAMERA_START = 'camera_start';
 export const CAMERA_CLOSE = 'camera_close';
 
 export const ADD_STUDENT_CHECKIN_LOG = 'add_student_checkin_log';
+export const CHANGE_LOG_READING_STATUS = 'change_log_reading_status';
