@@ -1,9 +1,9 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import Home from './src/routes/Home';
+import Scanner from './src/routes/Scanner';
 
 const Router = StackNavigator({
-  Home: { screen: Home, navigationOptions: () => ({ title: 'Home' }) },
+  Scanner: { screen: Scanner, navigationOptions: () => ({ title: 'Scanner' }) },
 });
 
 export default Router;
