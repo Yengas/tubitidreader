@@ -5,7 +5,7 @@ import DialogAndroid from 'react-native-dialogs';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { StudentLogType } from '../models/StudentTypes';
 import {
-  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult
+  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult, cancelStudentLog
 } from '../actions';
 import BarcodeReader from '../components/BarcodeReader';
 import CameraClosed from "../components/CameraClosed";
@@ -66,7 +66,7 @@ export class Home extends Component<Props> {
   // Sync the un-synced qr code reads with the database.
   syncButtonPressed(){
     this.props.syncLogRequest(
-      this.props.studentState.desync.filter(x => !x.isSync && !x.isCancelled)
+      this.props.studentState.desync.filter(x => !x.isSync)
     );
   }
 
@@ -116,6 +116,7 @@ export class Home extends Component<Props> {
           <StudentSyncList
             syncStudents={sync}
             desyncStudents={desync}
+            onStudentLogCancel={(id) => this.props.cancelStudentLog(id)}
             style={styles.studentSyncList}/>
         </View>
       </View>
@@ -183,5 +184,5 @@ function mapStateToProps(state){
 }
 
 export default connect(mapStateToProps, {
-  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult
+  cameraStartAction, barcodeReadAction, changeLogReadingStatus, syncLogRequest, clearSyncResult, cancelStudentLog
 })(Home);

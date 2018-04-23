@@ -1,6 +1,7 @@
 import {
   ADD_STUDENT_CHECKIN_LOG, CHANGE_LOG_READING_STATUS, SYNC_LOG_REQUEST,
-  SYNC_LOG_REQUEST_SUCCESS, SYNC_LOG_REQUEST_FAILED, CLEAR_SYNC_RESULT
+  SYNC_LOG_REQUEST_SUCCESS, SYNC_LOG_REQUEST_FAILED, CLEAR_SYNC_RESULT,
+  CANCEL_STUDENT_LOG,
 } from './types';
 
 export function addStudentCheckinLog(student, time, metadata, sync = null, cancelled = false){
@@ -29,4 +30,8 @@ export function syncLogRequestFailed(message){
 
 export function clearSyncResult(){
   return { type: CLEAR_SYNC_RESULT };
+}
+
+export function cancelStudentLog(id){
+  return { type: CANCEL_STUDENT_LOG, id };
 }

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, FlatList, PixelRatio } from 'react-native';
+import { View, Text, StyleSheet, FlatList, PixelRatio, Button, TouchableOpacity } from 'react-native';
+import { SwipeRow } from 'react-native-swipe-list-view';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StudentLogType } from '../models/StudentTypes';
 import StudentSyncListItem from './StudentSyncListItem';
@@ -9,6 +10,7 @@ type Props = {
   syncedTabTitle: string,
   syncStudents: Array<StudentLogType>,
   desyncStudents: Array<StudentLogType>,
+  onStudentLogCancel: (id: number) => void,
 };
 
 type State = {
@@ -31,6 +33,22 @@ export class StudentSyncList extends PureComponent<Props, State>{
     this.state = {
       selected: 'desync'
     };
+  }
+
+  wrapInSwipeRow(row, id, wrap = false){
+    const { onStudentLogCancel } = this.props;
+    if(!wrap) return row;
+
+    return (
+      <SwipeRow rightOpenValue={-40}>
+        <View style={styles.hiddenRowStyle}>
+          <TouchableOpacity onPress={() => onStudentLogCancel ? onStudentLogCancel(id) : undefined}>
+            <MCIcon style={styles.hiddenRowText} name="cancel" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.shownRowStyle}>{row}</View>
+      </SwipeRow>
+    );
   }
 
   render(){
@@ -66,7 +84,7 @@ export class StudentSyncList extends PureComponent<Props, State>{
                 const syncTime = sync ? sync.time : undefined;
                 const status = metadata ? metadata.status : undefined;
 
-                return (<StudentSyncListItem
+                return this.wrapInSwipeRow(<StudentSyncListItem
                   name={student.name}
                   department={student.department}
                   grade={student.grade}
@@ -74,7 +92,7 @@ export class StudentSyncList extends PureComponent<Props, State>{
                   status={status}
                   isSync={isSync}
                   syncTime={syncTime}
-                  readTime={time} />);
+                  readTime={time} />, student.id, selected === 'desync' && !isCancelled);
             }} />
         </View>
       </View>
@@ -103,6 +121,21 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingTop: 10 / PixelRatio.get(),
     paddingHorizontal: 10 / PixelRatio.get(),
+  },
+  hiddenRowStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'red',
+    paddingRight: 10 / PixelRatio.get(),
+  },
+  hiddenRowText: {
+    fontSize: 32,
+    color: 'white',
+  },
+  shownRowStyle: {
+    backgroundColor: '#efeff4',
   },
 });
 

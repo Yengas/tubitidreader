@@ -1,11 +1,12 @@
 import {
   ADD_STUDENT_CHECKIN_LOG, CHANGE_LOG_READING_STATUS, SYNC_LOG_REQUEST,
-  SYNC_LOG_REQUEST_SUCCESS, SYNC_LOG_REQUEST_FAILED, CLEAR_SYNC_RESULT
+  SYNC_LOG_REQUEST_SUCCESS, SYNC_LOG_REQUEST_FAILED, CLEAR_SYNC_RESULT,
+  CANCEL_STUDENT_LOG,
 } from '../actions/types';
 
 export const defaultState = {
   sync: [],
-  desync: [],
+  desync: [{"student":{"id":1152602008,"grade":3,"name":"YİĞİTCAN UÇUM","department":"BTBS"},"time":1524442303077,"metadata":{"status":"enter"},"isSync":false,"isCancelled":false}],
   logReadingStatus: 'none',
   syncInProgress: false,
   syncResult: undefined,
@@ -50,6 +51,16 @@ export default (state = defaultState, action) => {
       return { ...state, syncInProgress: false, syncResult: { error: true, message: action.message }};
     case CLEAR_SYNC_RESULT:
       return { ...state, syncResult: undefined };
+    case CANCEL_STUDENT_LOG:
+      return {
+        ...state,
+        desync: state.desync.map((log) => {
+          if(log.student.id !== action.id || log.isSync)
+            return log;
+
+          return { ...log, isCancelled: true };
+        })
+      };
   }
 
   return state;
