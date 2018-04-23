@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Picker, Button, StyleSheet, PixelRatio } from 'react-native';
-import DialogAndroid from 'react-native-dialogs';
 
 type Props = {
   roles: Array<{
@@ -36,21 +35,8 @@ export class ReaderRole extends PureComponent<Props>{
     return index < 0 ? 0 : index;
   }
 
-  showDialog(selectedIndex){
-    const dialog = new DialogAndroid();
-    const options = {
-      title: this.props.roleSelectDialogTitle,
-      items: this.props.roles.map(({ name }) => name),
-      selectedIndex,
-      itemsCallbackSingleChoice: (idx, name) => this.props.onChange(this.props.roles[idx].value, name)
-    };
-
-    dialog.set(options);
-    dialog.show();
-  }
-
   render(){
-    const { roleTitle, changeButtonText } = this.props;
+    const { roleTitle, roles } = this.props;
     const selectedIndex = this.getSelectedIndex();
     const selected = this.props.roles[selectedIndex];
 
@@ -58,12 +44,13 @@ export class ReaderRole extends PureComponent<Props>{
       <View style={[styles.container, this.props.style]}>
         <View style={styles.textContainer}>
           <Text style={styles.titleText}>{roleTitle}:</Text>
-          <Text stlye={styles.statusText}>{selected.name}</Text>
+          <Picker
+            style={styles.pickerStyle}
+            onValueChange={(value, idx) => this.props.onChange(value, roles[idx].name)}
+            selectedValue={selected.value}>
+            {roles.map(({ name, value }) => <Picker.Item label={name} value={value} key={value} />)}
+          </Picker>
         </View>
-        <Button
-          style={styles.changeButton}
-          title={changeButtonText}
-          onPress={() => this.showDialog(selectedIndex)} />
       </View>
     );
   }
@@ -80,10 +67,14 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   titleText: {
     fontWeight: 'bold',
     paddingRight: 10 / PixelRatio.get(),
+  },
+  pickerStyle: {
+    flex: 1,
   },
   statusText: {},
   changeButton: {}

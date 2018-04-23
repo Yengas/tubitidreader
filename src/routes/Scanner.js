@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
-import DialogAndroid from 'react-native-dialogs';
+import { Alert, View, Text, StyleSheet, PixelRatio, TouchableOpacity } from 'react-native';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { StudentLogType } from '../models/StudentTypes';
 import {
@@ -71,16 +70,13 @@ export class Home extends Component<Props> {
   }
 
   showSyncResultDialog(syncResult){
-    const dialog = new DialogAndroid();
-
-    dialog.set({
-      title: syncResult.error ? I18n.t('sync_request_dialog_error_title') : I18n.t('sync_request_dialog_success_title'),
-      content: !syncResult.error
+    Alert.alert(
+      syncResult.error ? I18n.t('sync_request_dialog_error_title') : I18n.t('sync_request_dialog_success_title'),
+      !syncResult.error
         ? I18n.t('sync_request_dialog_success_description')
         : I18n.t('sync_request_dialog_error_description').replace('%s', syncResult.message),
-      positiveText: I18n.t('sync_request_dialog_ok'),
-    });
-    dialog.show();
+      [ { text: I18n.t('sync_request_dialog_ok') } ],
+    );
   }
 
   render(){
