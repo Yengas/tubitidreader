@@ -10,7 +10,7 @@ type Props = {
   syncedTabTitle: string,
   syncStudents: Array<StudentLogType>,
   desyncStudents: Array<StudentLogType>,
-  onStudentLogCancel: (id: number) => void,
+  onStudentLogCancel: (id: number, time: number) => void,
 };
 
 type State = {
@@ -35,14 +35,14 @@ export class StudentSyncList extends PureComponent<Props, State>{
     };
   }
 
-  wrapInSwipeRow(row, id, wrap = false){
+  wrapInSwipeRow(row, { id, time }, wrap = false){
     const { onStudentLogCancel } = this.props;
     if(!wrap) return row;
 
     return (
       <SwipeRow rightOpenValue={-40}>
         <View style={styles.hiddenRowStyle}>
-          <TouchableOpacity onPress={() => onStudentLogCancel ? onStudentLogCancel(id) : undefined}>
+          <TouchableOpacity onPress={() => onStudentLogCancel ? onStudentLogCancel(id, time) : undefined}>
             <MCIcon style={styles.hiddenRowText} name="cancel" />
           </TouchableOpacity>
         </View>
@@ -92,7 +92,7 @@ export class StudentSyncList extends PureComponent<Props, State>{
                   status={status}
                   isSync={isSync}
                   syncTime={syncTime}
-                  readTime={time} />, student.id, selected === 'desync' && !isCancelled);
+                  readTime={time} />, { id: student.id, time }, selected === 'desync' && !isCancelled);
             }} />
         </View>
       </View>

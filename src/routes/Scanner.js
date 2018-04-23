@@ -112,7 +112,7 @@ export class Home extends Component<Props> {
           <StudentSyncList
             syncStudents={sync}
             desyncStudents={desync}
-            onStudentLogCancel={(id) => this.props.cancelStudentLog(id)}
+            onStudentLogCancel={(id, time) => this.props.cancelStudentLog(id, time)}
             style={styles.studentSyncList}/>
         </View>
       </View>

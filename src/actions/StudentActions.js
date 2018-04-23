@@ -32,6 +32,6 @@ export function clearSyncResult(){
   return { type: CLEAR_SYNC_RESULT };
 }
 
-export function cancelStudentLog(id){
-  return { type: CANCEL_STUDENT_LOG, id };
+export function cancelStudentLog(id, time){
+  return { type: CANCEL_STUDENT_LOG, id, time };
 }

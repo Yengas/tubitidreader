@@ -6,7 +6,7 @@ import {
 
 export const defaultState = {
   sync: [],
-  desync: [{"student":{"id":1152602008,"grade":3,"name":"YİĞİTCAN UÇUM","department":"BTBS"},"time":1524442303077,"metadata":{"status":"enter"},"isSync":false,"isCancelled":false}],
+  desync: [],
   logReadingStatus: 'none',
   syncInProgress: false,
   syncResult: undefined,
@@ -55,7 +55,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         desync: state.desync.map((log) => {
-          if(log.student.id !== action.id || log.isSync)
+          if(log.student.id !== action.id || log.time !== action.time|| log.isSync)
             return log;
 
           return { ...log, isCancelled: true };
