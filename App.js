@@ -10,12 +10,13 @@ import { createEpicMiddleware } from 'redux-observable';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import { HMAC_SECRET } from './src/secrets';
+import { HMAC_SECRET, BACKEND_URL } from './src/secrets';
 import createQRParserClass from './src/QRParser';
 import Router from './Router';
 import createEpics from './src/epics';
 import reducers from './src/reducers';
 import { YellowBox } from 'react-native';
+import TubitIDStorage from './src/TubitIDStorage';
 
 // ignore some warnings...
 // this one is related to react-navigation.
@@ -27,9 +28,10 @@ export default class App extends Component {
   render() {
     const QRParser = createQRParserClass();
     const parser = new QRParser(HMAC_SECRET);
+    const tubitIDStorage = new TubitIDStorage(BACKEND_URL);
 
     const initialState = {};
-    const epics = createEpics(parser);
+    const epics = createEpics(parser, tubitIDStorage);
     const epicMiddleware = createEpicMiddleware(epics);
     const store = createStore(
       reducers,

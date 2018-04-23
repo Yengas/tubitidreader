@@ -5,16 +5,8 @@ import { STUDENT_READ_SUCCESS_ACTION, SYNC_LOG_REQUEST } from '../actions/types'
 import { ofType } from 'redux-observable';
 
 export class StudentEpics{
-  constructor(){
-  }
-
-  sendSyncRequest(logs){
-    // dummy impl. return all ids as synced.
-    // TODO: implement for real.
-    return Rx.Observable.of({ time: Date.now(), ids: logs.map(x => x.student.id) }).pipe(
-      // simulate 2 secs of lag.
-        delay(2000)
-      );
+  constructor(tubitIDStorage){
+    this.tubitIDStorage = tubitIDStorage;
   }
 
   addStudentLogOnQrCodeRead = (action$, store) =>
@@ -30,7 +22,10 @@ export class StudentEpics{
     action$.pipe(
       ofType(SYNC_LOG_REQUEST),
       flatMap(({ logs }) =>
-        this.sendSyncRequest(logs)
+        Rx.Observable.fromPromise(
+          this.tubitIDStorage.logsPut(logs)
+        )
+          .map(({ results, time }) => ({ ids: results.map(({ studentId }) => studentId), time }))
           .map(({ ids, time }) => syncLogRequestSuccess(ids, time))
           .catch((err) => Rx.Observable.of(syncLogRequestFailed(err.message)))
       )
